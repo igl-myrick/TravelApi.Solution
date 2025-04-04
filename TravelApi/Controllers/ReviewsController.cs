@@ -53,5 +53,39 @@ namespace TravelApi.Controllers
       await _db.SaveChangesAsync();
       return CreatedAtAction(nameof(GetReview), new { id = review.ReviewId }, review);
     }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Put(int id, Review review)
+    {
+      if (id != review.ReviewId)
+      {
+        return BadRequest();
+      }
+
+      _db.Reviews.Update(review);
+
+      try
+      {
+        await _db.SaveChangesAsync();
+      }
+      catch
+      {
+        if (!ReviewExists(id))
+        {
+          return NotFound();
+        }
+        else
+        {
+          throw;
+        }
+      }
+
+      return NoContent();
+    }
+
+    private bool ReviewExists(int id)
+    {
+      return _db.Reviews.Any(e => e.ReviewId == id);
+    }
   }
 }

@@ -32,5 +32,18 @@ namespace TravelApi.Controllers
 
       return await query.ToListAsync();
     }
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult<Review>> GetReview(int id)
+    {
+      Review review = await _db.Reviews.FindAsync(id);
+
+      if (review == null)
+      {
+        return NotFound();
+      }
+
+      return review;
+    }
   }
 }

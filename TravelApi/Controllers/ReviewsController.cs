@@ -87,5 +87,20 @@ namespace TravelApi.Controllers
     {
       return _db.Reviews.Any(e => e.ReviewId == id);
     }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteReview(int id)
+    {
+      Review review = await _db.Reviews.FindAsync(id);
+      if (review == null)
+      {
+        return NotFound();
+      }
+
+      _db.Reviews.Remove(review);
+      await _db.SaveChangesAsync();
+
+      return NoContent();
+    }
   }
 }

@@ -46,6 +46,15 @@ namespace TravelApi.Controllers
       return review;
     }
 
+    [HttpGet]
+    public async Task<ActionResult<Review>> GetRandom()
+    {
+      Random rand = new Random();
+      int randomId = rand.Next(1, _db.Reviews.Count());
+      Review reviewToDisplay = await _db.Reviews.FindAsync(randomId);
+      return reviewToDisplay;
+    }
+
     [HttpPost]
     public async Task<ActionResult<Review>> Post(Review review)
     {

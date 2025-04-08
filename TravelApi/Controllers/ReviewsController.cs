@@ -46,7 +46,7 @@ namespace TravelApi.Controllers
       return review;
     }
 
-    [HttpGet]
+    [HttpGet("random")]
     public async Task<ActionResult<Review>> GetRandom()
     {
       Random rand = new Random();

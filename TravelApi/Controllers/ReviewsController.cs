@@ -103,12 +103,17 @@ namespace TravelApi.Controllers
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteReview(int id)
+    public async Task<IActionResult> DeleteReview(int id, string userName)
     {
       Review review = await _db.Reviews.FindAsync(id);
       if (review == null)
       {
         return NotFound();
+      }
+
+      if (userName != review.UserName)
+      {
+        return BadRequest();
       }
 
       _db.Reviews.Remove(review);

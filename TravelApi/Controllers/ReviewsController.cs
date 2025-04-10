@@ -64,9 +64,14 @@ namespace TravelApi.Controllers
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Put(int id, Review review)
+    public async Task<IActionResult> Put(int id, string userName, Review review)
     {
       if (id != review.ReviewId)
+      {
+        return BadRequest();
+      }
+
+      if (userName != review.UserName)
       {
         return BadRequest();
       }

@@ -1,3 +1,4 @@
+using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TravelApi.Models;
@@ -53,6 +54,34 @@ namespace TravelApi.Controllers
       int randomId = rand.Next(1, _db.Reviews.Count());
       Review reviewToDisplay = await _db.Reviews.FindAsync(randomId);
       return reviewToDisplay;
+    }
+
+    [HttpGet("popular")]
+    public async Task<ActionResult<Dictionary<string,int>>> GetPopular()
+    {
+
+      List<Review> reviews = _db.Reviews.ToList();
+      List<string> cities = new List<string>{};
+      if (reviews != null)
+      {
+        foreach (Review review in reviews)
+        {
+          cities.Add(review.City);
+        }
+      }
+
+      Dictionary<string, int> mostPopular = cities.GroupBy(x => x).ToDictionary(x => x.Key, x => x.Count());
+      foreach (string key in mostPopular.Keys)
+      {
+        List<Review> cityReviews = _db.Reviews.Where(r => r.City == key).ToList();
+        List<int> ratings = new List<int>{};
+        foreach (Review review in cityReviews)
+        {
+          ratings.Add(review.Rating);
+        }
+      }
+
+      return mostPopular;
     }
 
     [HttpPost]

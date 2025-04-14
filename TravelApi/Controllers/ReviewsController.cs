@@ -57,9 +57,8 @@ namespace TravelApi.Controllers
     }
 
     [HttpGet("popular")]
-    public async Task<ActionResult<Dictionary<string,int>>> GetPopular()
+    public async Task<ActionResult<Dictionary<string,double>>> GetPopular()
     {
-
       List<Review> reviews = _db.Reviews.ToList();
       List<string> cities = new List<string>{};
       if (reviews != null)
@@ -69,8 +68,9 @@ namespace TravelApi.Controllers
           cities.Add(review.City);
         }
       }
-
       Dictionary<string, int> mostPopular = cities.GroupBy(x => x).ToDictionary(x => x.Key, x => x.Count());
+
+      Dictionary<string, double> highestRated = new Dictionary<string, double>{};
       foreach (string key in mostPopular.Keys)
       {
         List<Review> cityReviews = _db.Reviews.Where(r => r.City == key).ToList();
@@ -79,9 +79,10 @@ namespace TravelApi.Controllers
         {
           ratings.Add(review.Rating);
         }
+        highestRated.Add(key, ratings.Average());
       }
 
-      return mostPopular;
+      return highestRated;
     }
 
     [HttpPost]

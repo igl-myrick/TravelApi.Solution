@@ -1,4 +1,3 @@
-using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TravelApi.Models;
@@ -57,32 +56,53 @@ namespace TravelApi.Controllers
     }
 
     [HttpGet("popular")]
-    public async Task<ActionResult<Dictionary<string,double>>> GetPopular()
+    public async Task<ActionResult<Dictionary<string, int>>> PopularResults()
     {
-      List<Review> reviews = _db.Reviews.ToList();
-      List<string> cities = new List<string>{};
-      if (reviews != null)
+      List<Review> reviews = await _db.Reviews.ToListAsync();
+      Dictionary<string, int> mostPopular = new Dictionary<string, int>{};
+      foreach (Review review in reviews)
       {
-        foreach (Review review in reviews)
+        if (mostPopular.ContainsKey(review.City))
+        {
+          mostPopular[review.City]++;
+        }
+        else
+        {
+          mostPopular.Add(review.City, 1);
+        }
+      }
+      Dictionary<string,int> orderedMostPopularCities = mostPopular.OrderByDescending(c => c.Value).ToDictionary(c => c.Key, c => c.Value);
+
+      return orderedMostPopularCities;
+    }
+
+    [HttpGet("highest-rated")]
+    public async Task<ActionResult<Dictionary<string,double>>> HighestRatedResults()
+    {
+      List<Review> reviews = await _db.Reviews.ToListAsync();
+      List<string> cities = new List<string>{};
+      foreach (Review review in reviews)
+      {
+        if (!cities.Contains(review.City))
         {
           cities.Add(review.City);
         }
       }
-      Dictionary<string, int> mostPopular = cities.GroupBy(x => x).ToDictionary(x => x.Key, x => x.Count());
 
       Dictionary<string, double> highestRated = new Dictionary<string, double>{};
-      foreach (string key in mostPopular.Keys)
+      foreach (string city in cities)
       {
-        List<Review> cityReviews = _db.Reviews.Where(r => r.City == key).ToList();
+        List<Review> cityReviews = _db.Reviews.Where(r => r.City == city).ToList();
         List<int> ratings = new List<int>{};
         foreach (Review review in cityReviews)
         {
           ratings.Add(review.Rating);
         }
-        highestRated.Add(key, ratings.Average());
+        highestRated.Add(city, ratings.Average());
       }
+      Dictionary<string,double> orderedHighestRated = highestRated.OrderByDescending(c => c.Value).ToDictionary(c => c.Key, c => c.Value);
 
-      return highestRated;
+      return orderedHighestRated;
     }
 
     [HttpPost]

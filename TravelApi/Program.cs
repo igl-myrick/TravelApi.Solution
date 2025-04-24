@@ -20,25 +20,23 @@ builder.Services.AddDbContext<TravelApiContext>(
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddAuthentication(options => 
-{
-  options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-  options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-  options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(options => 
-{
-  options.SaveToken = true;
-  options.RequireHttpsMetadata = false;
-  options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
+string jwtIssuer = builder.Configuration.GetSection("Jwt:Issuer").Get<string>();
+string jwtKey = builder.Configuration.GetSection("Jwt:Key").Get<string>();
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+  .AddJwtBearer(options => 
   {
-    ValidateIssuer = true,
-    ValidateAudience = true,
-    ValidAudience = "dotnetclient",
-    ValidIssuer = "http://localhost:5000",
-    ClockSkew = TimeSpan.Zero,
-    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("TestString123_TestString123"))
-  };
-});
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+      ValidateIssuer = true,
+      ValidateAudience = true,
+      ValidateLifetime = false,
+      ValidateIssuerSigningKey = true,
+      ValidAudience = jwtIssuer,
+      ValidIssuer = jwtIssuer,
+      IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
+    };
+  });
 
 var app = builder.Build();
 

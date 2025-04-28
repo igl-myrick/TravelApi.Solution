@@ -1,8 +1,9 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace TravelApi.Models
 {
-  public class TravelApiContext : DbContext
+  public class TravelApiContext : IdentityDbContext<ApplicationUser>
   {
     public DbSet<Review> Reviews { get; set; }
 

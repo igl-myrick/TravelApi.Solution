@@ -5,7 +5,6 @@ namespace TravelApi.Models
   public class RegisterModel
   {
     [Required]
-    [EmailAddress]
     [Display(Name = "Username")]
     public string Username { get; set; }
 

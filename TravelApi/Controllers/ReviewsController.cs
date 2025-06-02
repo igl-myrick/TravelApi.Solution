@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using TravelApi.Models;
+using System.Net.Http.Headers;
+using Newtonsoft.Json;
 
 namespace TravelApi.Controllers
 {
@@ -20,6 +22,8 @@ namespace TravelApi.Controllers
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Review>>> Get(string country, string city)
     {
+      var jwt = Request.Cookies["jwtCookie"];
+
       IQueryable<Review> query = _db.Reviews.AsQueryable();
 
       if (country != null)
@@ -32,8 +36,26 @@ namespace TravelApi.Controllers
         query = query.Where(entry => entry.City == city);
       }
 
+      using (var httpClient = new HttpClient())
+      {
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
+        using (var response = await httpClient.GetAsync("http://localhost:5000/api/reviews/")) 
+          {
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+              string apiResponse = await response.Content.ReadAsStringAsync();
+              query = (IQueryable<Review>)JsonConvert.DeserializeObject<List<Review>>(apiResponse);
+            }
+
+            if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            {
+              return Unauthorized("Please Login again");
+            }
+          }
+      }
+
       return await query.ToListAsync();
-    }
+      }
 
     [HttpGet("{id}")]
     public async Task<ActionResult<Review>> GetReview(int id)

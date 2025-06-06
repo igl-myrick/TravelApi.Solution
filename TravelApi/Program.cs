@@ -26,19 +26,25 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 string jwtIssuer = builder.Configuration.GetSection("Jwt:Issuer").Get<string>();
+string jwtAudience = builder.Configuration.GetSection("Jwt:Audience").Get<string>();
 string jwtKey = builder.Configuration.GetSection("Jwt:Key").Get<string>();
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-  .AddJwtBearer(options => 
+builder.Services.AddAuthentication(options =>
+{
+  options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+  options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+  options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
   {
-    options.TokenValidationParameters = new TokenValidationParameters
+    options.SaveToken = true;
+    options.RequireHttpsMetadata = false;
+    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
     {
       ValidateIssuer = true,
       ValidateAudience = true,
-      ValidateLifetime = false,
-      ValidateIssuerSigningKey = true,
-      ValidAudience = jwtIssuer,
+      ValidAudience = jwtAudience,
       ValidIssuer = jwtIssuer,
+      ClockSkew = TimeSpan.Zero,
       IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
     };
   });

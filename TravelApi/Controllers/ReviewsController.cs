@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using TravelApi.Models;
-using System.Net.Http.Headers;
 
 namespace TravelApi.Controllers
 {
@@ -32,20 +31,8 @@ namespace TravelApi.Controllers
       {
         query = query.Where(entry => entry.City == city);
       }
-
-      using (HttpClient httpClient = new HttpClient())
-      {
-        if (User.Identity.IsAuthenticated)
-        {
-          var jwt = Request.Cookies["jwtCookie"];
-          httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
-          return await query.ToListAsync();
-        }
-        else
-        {
-          return Unauthorized("Please login again");
-        }
-      }
+      
+      return await query.ToListAsync();
     }
 
     [HttpGet("{id}")]

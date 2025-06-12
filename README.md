@@ -14,7 +14,7 @@
 
 ## Description
 
-_An API for searching up travel destinations._
+_An API for searching up travel destinations. The API includes full CRUD functionality for viewing any and all reviews, adding new reviews, and editing or deleting existing reviews. Additionally, there are endpoints for viewing a random review, or viewing destinations by either how many times they've been reviewed, or their aggregated review score. Prior to accessing any travel information endpoints, users must create an account via the ``register`` endpoint. After creating an account and accessing the ``login`` endpoint, users will have access to travel endpoints for 10 minutes before they must sign in again._
 
 ## Setup/Installation Requirements
 
@@ -58,7 +58,7 @@ _7: Once the program is running, you can make calls to the API through either yo
 
 ## API Endpoints
 
-### Account management:
+### Manage accounts:
 
 _Registration:_
 

@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace TravelApi.Models
 {
-  public class LoginModel
+  public class Login
   {
     [Required]
     [Display(Name = "Username")]

@@ -25,10 +25,10 @@ namespace TravelApi.Controllers
     }
 
     [HttpPost("register")]
-    public async Task<IActionResult> Register(RegisterModel model)
+    public async Task<IActionResult> Register(Register registration)
     {
-      ApplicationUser user = new ApplicationUser { UserName = model.Username };
-      IdentityResult result = await _userManager.CreateAsync(user, model.Password);
+      ApplicationUser user = new ApplicationUser { UserName = registration.Username };
+      IdentityResult result = await _userManager.CreateAsync(user, registration.Password);
       if (result.Succeeded)
       {
         return NoContent();
@@ -40,9 +40,9 @@ namespace TravelApi.Controllers
     }
 
     [HttpPost("login")]
-    public async Task<IActionResult> Login(LoginModel model)
+    public async Task<IActionResult> Login(Login login)
     {
-      Microsoft.AspNetCore.Identity.SignInResult result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, isPersistent: false, lockoutOnFailure: false);
+      Microsoft.AspNetCore.Identity.SignInResult result = await _signInManager.PasswordSignInAsync(login.Username, login.Password, isPersistent: false, lockoutOnFailure: false);
       if (result.Succeeded)
       {
         var accessToken = GenerateJSONWebToken();
@@ -62,8 +62,8 @@ namespace TravelApi.Controllers
 
       JwtSecurityToken token = new JwtSecurityToken(
         issuer: _configuration["Jwt:Issuer"],
-        audience: _configuration["Jwt:Issuer"],
-        expires: DateTime.Now.AddMinutes(5),
+        audience: _configuration["Jwt:Audience"],
+        expires: DateTime.Now.AddMinutes(1),
         signingCredentials: credentials
       );
 
@@ -75,7 +75,7 @@ namespace TravelApi.Controllers
       CookieOptions cookieOptions = new CookieOptions
       {
         HttpOnly = true,
-        Expires = DateTime.Now.AddMinutes(5)
+        Expires = DateTime.Now.AddMinutes(1)
       };
       Response.Cookies.Append("jwtCookie", token, cookieOptions);
     }

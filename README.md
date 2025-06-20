@@ -16,6 +16,8 @@
 
 _An API for searching up travel destinations. The API includes full CRUD functionality for viewing any and all reviews, adding new reviews, and editing or deleting existing reviews. Additionally, there are endpoints for viewing a random review, or viewing destinations by either how many times they've been reviewed, or their aggregated review score. Prior to accessing any travel information endpoints, users must create an account via the ``register`` endpoint. After creating an account and accessing the ``login`` endpoint, users will have access to travel endpoints for 10 minutes before they must sign in again._
 
+_Note: When making API calls through Postman, please copy the token returned by the ``login`` route. To make calls, access the ``Authorization`` tab of your request, set the type to ``Bearer Token``, and paste your token. Once again, tokens expire after 10 minutes. After that, you will need to log in again and update your token._
+
 ## Setup/Installation Requirements
 
 * _You will need [.NET](https://dotnet.microsoft.com/en-us/download/dotnet/6.0), [MySQL](https://downloads.mysql.com/archives/get/p/25/file/mysql-installer-web-community-8.0.19.0.msi), and [Git](https://git-scm.com/downloads/) in order to run the program._

@@ -63,7 +63,7 @@ namespace TravelApi.Controllers
       JwtSecurityToken token = new JwtSecurityToken(
         issuer: _configuration["Jwt:Issuer"],
         audience: _configuration["Jwt:Audience"],
-        expires: DateTime.Now.AddMinutes(1),
+        expires: DateTime.Now.AddMinutes(10),
         signingCredentials: credentials
       );
 
@@ -75,7 +75,7 @@ namespace TravelApi.Controllers
       CookieOptions cookieOptions = new CookieOptions
       {
         HttpOnly = true,
-        Expires = DateTime.Now.AddMinutes(1)
+        Expires = DateTime.Now.AddMinutes(10)
       };
       Response.Cookies.Append("jwtCookie", token, cookieOptions);
     }

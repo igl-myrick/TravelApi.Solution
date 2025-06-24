@@ -64,45 +64,45 @@ _7: Once the program is running, you can make calls to the API through either yo
 
 _Registration:_
 
-``POST http://localhost:5000/api/auth/register``
+    POST http://localhost:5000/api/auth/register
 
 _Logging in:_
 
-``POST http://localhost:5000/api/auth/login``
+    POST http://localhost:5000/api/auth/login
 
 ### Travel endpoints:
 
 _Access a list of all reviews:_
 
-``GET http://localhost:5000/api/reviews/``
+    GET http://localhost:5000/api/reviews/
 
 _Access a specific review by id:_
 
-``GET http://localhost:5000/api/reviews/{id}``
+    GET http://localhost:5000/api/reviews/{id}
 
 _Add a  new review:_
 
-``POST http://localhost:5000/api/reviews/``
+    POST http://localhost:5000/api/reviews/
 
 _Edit an existing review:_
 
-``PUT http://localhost:5000/api/reviews/{id}``
+    PUT http://localhost:5000/api/reviews/{id}
 
 _Delete an existing review:_
 
-``DELETE http://localhost:5000/api/reviews/{id}``
+    DELETE http://localhost:5000/api/reviews/{id}
 
 _View a random review:_
 
-``GET http://localhost:5000/api/reviews/random``
+    GET http://localhost:5000/api/reviews/random
 
 _View the most reviewed destinations:_
 
-``GET http://localhost:5000/api/reviews/popular``
+    GET http://localhost:5000/api/reviews/popular
 
 _View the highest rated destinations:_
 
-``GET http://localhost:5000/api/reviews/highest-rated``
+    GET http://localhost:5000/api/reviews/highest-rated
 
 ### Endpoint details
 

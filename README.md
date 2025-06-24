@@ -106,6 +106,29 @@ _View the highest rated destinations:_
 
 ### Endpoint details
 
+#### Account-related Endpoints:
+
+_When registering for an account, you must include a username and a password in the body, as well as re-entering the password to confirm the spelling. Here is an example request:_
+
+```
+{
+    "username": "ExampleUser",
+    "password": "password1234",
+    "confirmPassword": "password1234"
+}
+```
+
+_Signing in required a similar body, except you do not need to confirm the password:_
+
+```
+{
+    "username": "ExampleUser",
+    "password": "password1234",
+}
+```
+
+#### Travel Endpoints:
+
 _The first GET route, which displays all reviews, has two optional parameters that can be used to narrow the list of reviews:_
 
 | Parameter | Type | Required | Description | Example query |

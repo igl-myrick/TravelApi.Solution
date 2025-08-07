@@ -46,7 +46,6 @@ namespace TravelApi.Controllers
       if (result.Succeeded)
       {
         var accessToken = GenerateJSONWebToken();
-        SetJWTCookie(accessToken);
         return Ok(accessToken);
       }
       else
@@ -68,16 +67,6 @@ namespace TravelApi.Controllers
       );
 
       return new JwtSecurityTokenHandler().WriteToken(token);
-    }
-
-    private void SetJWTCookie(string token)
-    {
-      CookieOptions cookieOptions = new CookieOptions
-      {
-        HttpOnly = true,
-        Expires = DateTime.Now.AddMinutes(10)
-      };
-      Response.Cookies.Append("jwtCookie", token, cookieOptions);
     }
   }
 }

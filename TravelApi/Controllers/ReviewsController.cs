@@ -123,11 +123,6 @@ namespace TravelApi.Controllers
         return BadRequest();
       }
 
-      if (userName != review.UserName)
-      {
-        return BadRequest();
-      }
-
       _db.Reviews.Update(review);
 
       try
@@ -161,11 +156,6 @@ namespace TravelApi.Controllers
       if (review == null)
       {
         return NotFound();
-      }
-
-      if (userName != review.UserName)
-      {
-        return BadRequest();
       }
 
       _db.Reviews.Remove(review);
